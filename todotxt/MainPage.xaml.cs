@@ -66,6 +66,7 @@ namespace todotxt
             {
                 //filenotefound
             }
+            
         }
 
         private async void readTodoFile()
@@ -77,11 +78,45 @@ namespace todotxt
         }
 
         private void fillTodoList()
-        { 
+        {
+            Array.Sort(todoText, compareTodoStrings);
+            //todoText.Sort(compareTodoStrings());
             for(int i = 0; i < todoText.Length; ++i)
             {
                 todoList.Items.Add(todoText[i]);
+            } 
+        }
+
+        public static int compareTodoStrings(string s1, string s2)
+        {
+            if (s1[0].Equals('('))
+            {
+                if (!s2[0].Equals('('))
+                    return -1;
+                switch (s1[1].ToString().CompareTo(s2[1].ToString()))
+                {
+                    case -1:
+                        return -1;
+                    case 1:
+                        return 1;
+                    case 0:
+                        return dateComparison(s1, s2);
+                }
             }
+            else if (s2[0].Equals('('))
+            {
+                return 1;
+            }
+            else
+                return dateComparison(s1, s2);
+            return -1;
+        }
+
+        public static int dateComparison(string s1, string s2)
+        {
+            // compare the date in the strings and return the larger one with return 0
+            // otherwise return 1
+            return 0;
         }
 
     }
