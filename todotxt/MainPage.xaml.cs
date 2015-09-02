@@ -28,7 +28,9 @@ namespace todotxt
         public MainPage()
         {
             this.InitializeComponent();
-
+            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Size { Height = 550, Width = 420 };
+            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            todoList.Height = this.Height - 100;
             
         }
 
@@ -81,5 +83,6 @@ namespace todotxt
                 todoList.Items.Add(todoText[i]);
             }
         }
+
     }
 }
