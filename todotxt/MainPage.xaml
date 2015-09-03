@@ -32,26 +32,26 @@
         <StackPanel x:Name="inputPanel" Orientation="Horizontal" Margin="0, 20, 0, 20" Grid.Row="0">
             <TextBox x:Name="inputBox" Width="Auto" Margin="5, 0, 5, 0"/>
             <Button x:Name="applyButton" Content="Apply!" Click="applyButton_Click"/>
-            <Button x:Name="fileOpen" Content="Open" Click="fileOpen_Click" HorizontalAlignment="Right"/>
-            <Button x:Name="settingsButton" Content="Settings" Click="settingsButton_Click">
+            <Button x:Name="settingsButton" Content="Settings" HorizontalAlignment="Right">
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel Orientation="Vertical">
                             <TextBlock Text="Settings"/>
                             <StackPanel Orientation="Horizontal" Margin="3">
                                 <TextBlock Text="todo.txt File: " VerticalAlignment="Center"/>
-                                <Button Content="Choose File" Margin="2"/>                                
+                                <Button x:Name="chooseTodoFile" Content="Choose File" Margin="2" Click="chooseTodoFile_Click"/>                                
                             </StackPanel>
                             <StackPanel Orientation="Horizontal" Margin="3">
                                 <TextBlock Text="done.txt File: " VerticalAlignment="Center"/>
-                                <Button Content="Choose File" Margin="2"/>
+                                <Button x:Name="chooseDoneFile" Content="Choose File" Margin="2" Click="chooseDoneFile_Click"/>
                             </StackPanel>
-                            <CheckBox Content="Auto Archive"/>
-                            <CheckBox Content="Auto add Date"/>
+                            <CheckBox x:Name="autoArchiveCB" Content="Auto Archive"/>
+                            <CheckBox x:Name="autoDateCB" Content="Auto add Date"/>
                         </StackPanel>
                     </Flyout>
                 </Button.Flyout>
             </Button>
+            <TextBlock x:Name="debugText" Text="init.." />
         </StackPanel>
             <ListBox x:Name="todoList" Margin="5, 5, 5, 5" Grid.Row="1"/>
             

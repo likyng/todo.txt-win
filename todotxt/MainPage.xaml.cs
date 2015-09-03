@@ -23,55 +23,78 @@ namespace todotxt
     public sealed partial class MainPage : Page
     {
         private Windows.Storage.StorageFile todoFile;
-        // private string[] todoText;
+        private Windows.Storage.StorageFile doneFile;
         private List<string> todoText;
-        private bool todoDataWasChanged = false;
 
         public MainPage()
         {
             this.InitializeComponent();
             Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Size { Height = 550, Width = 420 };
-            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;            
+            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            todoText = new List<string>();
         }
 
-        private async void applyButton_Click(object sender, RoutedEventArgs e)
+        private void applyButton_Click(object sender, RoutedEventArgs e)
         {
             if (!String.IsNullOrWhiteSpace(inputBox.Text) && !todoList.Items.Contains(inputBox.Text))
             {
-                todoText.Add(inputBox.Text);
-                fillTodoList();
-                if (todoFile != null)
-                {
-                    await Windows.Storage.FileIO.AppendTextAsync(todoFile, inputBox.Text + Environment.NewLine);
-                }
+                addTodoElement();
             }
         }
 
-        private void fileOpen_Click(object sender, RoutedEventArgs e)
+        private void chooseTodoFile_Click(object sender, RoutedEventArgs e)
         {
-            this.loadTodoFile();
+            loadFile("todo");
         }
 
-        private async void loadTodoFile()
+        private void chooseDoneFile_Click(object sender, RoutedEventArgs e)
+        {
+            loadFile("done");
+        }
+
+        private async void addTodoElement()
+        {
+            string textToAdd = "";
+            if (autoDateCB.IsChecked == true)
+            {
+                textToAdd = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + " ";
+            }
+            textToAdd = textToAdd.Insert(textToAdd.Length, inputBox.Text);
+            todoText.Add(textToAdd);
+            fillTodoList();
+            if (todoFile != null)
+            {
+                await Windows.Storage.FileIO.AppendTextAsync(todoFile, textToAdd + Environment.NewLine);
+            }
+        }
+
+        private async void loadFile(string fileType)
         {
             Windows.Storage.Pickers.FileOpenPicker openPicker = new Windows.Storage.Pickers.FileOpenPicker();
             openPicker.ViewMode = Windows.Storage.Pickers.PickerViewMode.List;
             openPicker.SuggestedStartLocation = Windows.Storage.Pickers.PickerLocationId.DocumentsLibrary;
             openPicker.FileTypeFilter.Add(".txt");
-            todoFile = await openPicker.PickSingleFileAsync();
-            try
+            switch (fileType)
             {
-                if (todoFile != null)
-                {
-                    //todoFileToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(todoFile);
-                    readTodoFile();
-                }
+                case "todo":
+                    todoFile = await openPicker.PickSingleFileAsync();
+                    try
+                    {
+                        if (todoFile != null)
+                        {
+                            //todoFileToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(todoFile);
+                            readTodoFile();
+                        }
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        //filenotefound
+                    }
+                    break;
+                case "done":
+                    doneFile = await openPicker.PickSingleFileAsync();
+                    break;
             }
-            catch(FileNotFoundException)
-            {
-                //filenotefound
-            }
-            
         }
 
         private async void readTodoFile()
@@ -125,9 +148,5 @@ namespace todotxt
             return 0;
         }
 
-        private void settingsButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
     }
 }
