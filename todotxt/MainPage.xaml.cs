@@ -57,7 +57,7 @@ namespace todotxt
             string textToAdd = "";
             if (autoDateCB.IsChecked == true)
             {
-                textToAdd = DateTime.Now.Year.ToString() + "-" + DateTime.Now.Month.ToString() + "-" + DateTime.Now.Day.ToString() + " ";
+                textToAdd = DateTime.Now.ToString("yyyy-MM-dd") + " ";
             }
             textToAdd = textToAdd.Insert(textToAdd.Length, inputBox.Text);
             todoText.Add(textToAdd);
