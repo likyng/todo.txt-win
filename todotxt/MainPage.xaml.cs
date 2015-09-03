@@ -23,26 +23,31 @@ namespace todotxt
     public sealed partial class MainPage : Page
     {
         private Windows.Storage.StorageFile todoFile;
-        private string[] todoText;
+        // private string[] todoText;
+        private List<string> todoText;
+        private bool todoDataWasChanged = false;
 
         public MainPage()
         {
             this.InitializeComponent();
             Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Size { Height = 550, Width = 420 };
-            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;
-            todoList.Height = this.Height - 100;
-            
+            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;            
         }
 
-        private void applyButton_Click(object sender, RoutedEventArgs e)
+        private async void applyButton_Click(object sender, RoutedEventArgs e)
         {
-            if(!String.IsNullOrWhiteSpace(inputBox.Text) && !todoList.Items.Contains(inputBox.Text))
+            if (!String.IsNullOrWhiteSpace(inputBox.Text) && !todoList.Items.Contains(inputBox.Text))
             {
-                todoList.Items.Add(inputBox.Text);
+                todoText.Add(inputBox.Text);
+                fillTodoList();
+                if (todoFile != null)
+                {
+                    await Windows.Storage.FileIO.AppendTextAsync(todoFile, inputBox.Text + Environment.NewLine);
+                }
             }
         }
 
-        private void openFile_Click(object sender, RoutedEventArgs e)
+        private void fileOpen_Click(object sender, RoutedEventArgs e)
         {
             this.loadTodoFile();
         }
@@ -73,15 +78,15 @@ namespace todotxt
         {
             string todoTextTemp = await Windows.Storage.FileIO.ReadTextAsync(todoFile);
             // string[] seperator = { "\r\n", "\n" };  matches unix and windows newlines
-            todoText = todoTextTemp.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+            todoText = new List<string>(todoTextTemp.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
             this.fillTodoList();
         }
 
         private void fillTodoList()
         {
-            Array.Sort(todoText, compareTodoStrings);
-            //todoText.Sort(compareTodoStrings());
-            for(int i = 0; i < todoText.Length; ++i)
+            todoText.Sort(compareTodoStrings);
+            todoList.Items.Clear();
+            for(int i = 0; i < todoText.Count; ++i)
             {
                 todoList.Items.Add(todoText[i]);
             } 
@@ -116,8 +121,13 @@ namespace todotxt
         {
             // compare the date in the strings and return the larger one with return 0
             // otherwise return 1
+            // strings also might not have a date string
             return 0;
         }
 
+        private void settingsButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

@@ -30,9 +30,28 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel x:Name="inputPanel" Orientation="Horizontal" Margin="0, 20, 0, 20" Grid.Row="0">
-            <TextBox x:Name="inputBox" Width="400" Margin="5, 0, 5, 0"/>
+            <TextBox x:Name="inputBox" Width="Auto" Margin="5, 0, 5, 0"/>
             <Button x:Name="applyButton" Content="Apply!" Click="applyButton_Click"/>
-            <Button x:Name="openFile" Content="open!" Click="openFile_Click"/>
+            <Button x:Name="fileOpen" Content="Open" Click="fileOpen_Click" HorizontalAlignment="Right"/>
+            <Button x:Name="settingsButton" Content="Settings" Click="settingsButton_Click">
+                <Button.Flyout>
+                    <Flyout>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock Text="Settings"/>
+                            <StackPanel Orientation="Horizontal" Margin="3">
+                                <TextBlock Text="todo.txt File: " VerticalAlignment="Center"/>
+                                <Button Content="Choose File" Margin="2"/>                                
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Margin="3">
+                                <TextBlock Text="done.txt File: " VerticalAlignment="Center"/>
+                                <Button Content="Choose File" Margin="2"/>
+                            </StackPanel>
+                            <CheckBox Content="Auto Archive"/>
+                            <CheckBox Content="Auto add Date"/>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
         </StackPanel>
             <ListBox x:Name="todoList" Margin="5, 5, 5, 5" Grid.Row="1"/>
             
