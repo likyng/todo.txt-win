@@ -12,7 +12,7 @@
             <VisualStateGroup>
                 <VisualState x:Name="wideState">
                     <VisualState.StateTriggers>
-                        <AdaptiveTrigger MinWindowWidth="641" />
+                        <AdaptiveTrigger MinWindowWidth="400" />
                     </VisualState.StateTriggers>
                 </VisualState>
                 <VisualState x:Name="narrowState">
@@ -32,7 +32,7 @@
         <StackPanel x:Name="inputPanel" Orientation="Horizontal" Margin="0, 20, 0, 20" Grid.Row="0">
             <TextBox x:Name="inputBox" Width="Auto" Margin="5, 0, 5, 0"/>
             <Button x:Name="applyButton" Content="Apply!" Click="applyButton_Click"/>
-            <Button x:Name="settingsButton" Content="Settings" HorizontalAlignment="Right">
+            <Button x:Name="settingsButton" Content="Settings">
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel Orientation="Vertical">
