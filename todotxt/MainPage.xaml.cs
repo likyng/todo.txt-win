@@ -26,6 +26,7 @@ namespace todotxt
         private Windows.Storage.StorageFile todoFile;
         private Windows.Storage.StorageFile doneFile;
         private string todoFileToken = "";
+        private string doneFileToken = "";
         private List<string> todoText;
 
         public MainPage()
@@ -64,28 +65,60 @@ namespace todotxt
                 if (loadedTodoFileToken.GetType() == todoFileToken.GetType())
                 {
                     todoFileToken = (string)loadedTodoFileToken;
-                    loadTodoFileFromToken();
+                    loadFileFromToken("todo");
                 }
             }
+
+            Object loadedDoneFileToken = localSettings.Values["doneFileToken"];
+            if (loadedDoneFileToken != null)
+            {
+                if (loadedDoneFileToken.GetType() == doneFileToken.GetType())
+                {
+                    doneFileToken = (string)loadedDoneFileToken;
+                    loadFileFromToken("done");
+                }
+            }
+
         }
 
-        private async void loadTodoFileFromToken()
+        private async void loadFileFromToken(string fileType)
         {
             bool done = false;
-            try
+            switch (fileType)
             {
-                todoFile = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(todoFileToken);
-                done = true;
+                case "todo":
+                    try
+                    {
+                        todoFile = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(todoFileToken);
+                        done = true;
 
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("Todo file not found. Specify a new one in the Settings.", "todo.txt File not found");
+                    }
+                    if (done)
+                    {
+                        readTodoFile();
+                    }
+                    break;
+                case "done":
+                    try
+                    {
+                        doneFile = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(doneFileToken);
+                        done = true;
+
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("Done file not found. Specify a new one in the Settings.", "done.txt File not found");
+                    }
+                    if (done)
+                    {
+                    }
+                    break;
             }
-            catch (FileNotFoundException)
-            {
-                Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("Todo file not found. Specify a new one in the Settings.", "todo.txt File not found");
-            }
-            if (done)
-            {
-                readTodoFile();
-            }
+
         }
 
         private void applyButton_Click(object sender, RoutedEventArgs e)
@@ -148,7 +181,8 @@ namespace todotxt
                     break;
                 case "done":
                     doneFile = await openPicker.PickSingleFileAsync();
-                    localSettings.Values["doneFile"] = doneFile;
+                    doneFileToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(doneFile, doneFile.Name);
+                    localSettings.Values["doneFileToken"] = doneFileToken;
                     break;
             }
         }
