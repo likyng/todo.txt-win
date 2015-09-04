@@ -25,6 +25,7 @@ namespace todotxt
         private Windows.Storage.ApplicationDataContainer localSettings;
         private Windows.Storage.StorageFile todoFile;
         private Windows.Storage.StorageFile doneFile;
+        private string todoFileToken = "";
         private List<string> todoText;
 
         public MainPage()
@@ -60,6 +61,24 @@ namespace todotxt
                     autoArchiveCB.IsChecked = true;
                 }
             }
+
+            Object loadedTodoFileToken = localSettings.Values["todoFileToken"];
+            if (loadedTodoFileToken != null)
+            {
+                if (loadedTodoFileToken.GetType() == todoFileToken.GetType())
+                {
+                    todoFileToken = (string)loadedTodoFileToken;
+                    // error handling missing
+                    loadTodoFileFromToken();
+                }
+            }
+        }
+
+        private async void loadTodoFileFromToken()
+        {
+            // error handling missing
+            todoFile = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(todoFileToken);
+            readTodoFile();
         }
 
         private void applyButton_Click(object sender, RoutedEventArgs e)
@@ -110,7 +129,8 @@ namespace todotxt
                     {
                         if (todoFile != null)
                         {
-                            //todoFileToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(todoFile);
+                            todoFileToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(todoFile, todoFile.Name);
+                            localSettings.Values["todoFileToken"] = todoFileToken;
                             readTodoFile();
                         }
                     }
@@ -121,6 +141,7 @@ namespace todotxt
                     break;
                 case "done":
                     doneFile = await openPicker.PickSingleFileAsync();
+                    localSettings.Values["doneFile"] = doneFile;
                     break;
             }
         }
