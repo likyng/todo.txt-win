@@ -64,7 +64,6 @@ namespace todotxt
                 if (loadedTodoFileToken.GetType() == todoFileToken.GetType())
                 {
                     todoFileToken = (string)loadedTodoFileToken;
-                    // error handling missing
                     loadTodoFileFromToken();
                 }
             }
@@ -73,16 +72,15 @@ namespace todotxt
         private async void loadTodoFileFromToken()
         {
             bool done = false;
-            // error handling missing
             try
             {
                 todoFile = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(todoFileToken);
                 done = true;
 
             }
-            catch
+            catch (FileNotFoundException)
             {
-
+                Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("Todo file not found. Specify a new one in the Settings.", "todo.txt File not found");
             }
             if (done)
             {
