@@ -22,6 +22,7 @@ namespace todotxt
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        private Windows.Storage.ApplicationDataContainer localSettings;
         private Windows.Storage.StorageFile todoFile;
         private Windows.Storage.StorageFile doneFile;
         private List<string> todoText;
@@ -32,6 +33,24 @@ namespace todotxt
             Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Size { Height = 550, Width = 420 };
             Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;
             todoText = new List<string>();
+            localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
+
+            Object autoAddDate = localSettings.Values["autoAddDate"];
+            if (autoAddDate != null)
+            {
+                if (autoAddDate is bool)
+                {
+                    if ((bool)autoAddDate == true)
+                    {
+                        autoDateCB.IsChecked = true;
+                    }
+                    else
+                    {
+                        autoDateCB.IsChecked = false;
+                    }
+
+                }
+            }
         }
 
         private void applyButton_Click(object sender, RoutedEventArgs e)
@@ -148,5 +167,14 @@ namespace todotxt
             return 0;
         }
 
+        private void autoDateCB_Checked(object sender, RoutedEventArgs e)
+        {
+            localSettings.Values["autoAddDate"] = true;
+        }
+
+        private void autoDateCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            localSettings.Values["autoAddDate"] = false;
+        }
     }
 }
