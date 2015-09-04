@@ -39,17 +39,13 @@ namespace todotxt
             Object autoAddDate = localSettings.Values["autoAddDate"];
             if (autoAddDate != null)
             {
-                if (autoAddDate is bool)
+                if (autoAddDate is bool && (bool)autoAddDate == true)
                 {
-                    if ((bool)autoAddDate == true)
-                    {
-                        autoDateCB.IsChecked = true;
-                    }
-                    else
-                    {
-                        autoDateCB.IsChecked = false;
-                    }
-
+                    autoDateCB.IsChecked = true;
+                }
+                else
+                {
+                    autoDateCB.IsChecked = false;
                 }
             }
 
@@ -76,9 +72,22 @@ namespace todotxt
 
         private async void loadTodoFileFromToken()
         {
+            bool done = false;
             // error handling missing
-            todoFile = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(todoFileToken);
-            readTodoFile();
+            try
+            {
+                todoFile = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(todoFileToken);
+                done = true;
+
+            }
+            catch
+            {
+
+            }
+            if (done)
+            {
+                readTodoFile();
+            }
         }
 
         private void applyButton_Click(object sender, RoutedEventArgs e)
