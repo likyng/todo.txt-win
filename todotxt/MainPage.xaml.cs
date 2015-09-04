@@ -51,6 +51,15 @@ namespace todotxt
 
                 }
             }
+
+            Object autoArchive = localSettings.Values["autoArchive"];
+            if (autoArchive != null)
+            {
+                if (autoArchive is bool && (bool)autoArchive == true)
+                {
+                    autoArchiveCB.IsChecked = true;
+                }
+            }
         }
 
         private void applyButton_Click(object sender, RoutedEventArgs e)
@@ -175,6 +184,19 @@ namespace todotxt
         private void autoDateCB_Unchecked(object sender, RoutedEventArgs e)
         {
             localSettings.Values["autoAddDate"] = false;
+        }
+
+        private void autoArchiveCB_Checked(object sender, RoutedEventArgs e)
+        {
+            localSettings.Values["autoArchive"] = true;
+        }
+
+        private void autoArchiveCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (localSettings.Values["autoArchive"] != null)
+            {
+                localSettings.Values.Remove("autoArchive");
+            }
         }
     }
 }
