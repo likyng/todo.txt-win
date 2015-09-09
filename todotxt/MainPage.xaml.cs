@@ -92,7 +92,6 @@ namespace todotxt
                     {
                         todoFile = await Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.GetFileAsync(todoFileToken);
                         done = true;
-
                     }
                     catch (FileNotFoundException)
                     {
@@ -119,7 +118,6 @@ namespace todotxt
                     }
                     break;
             }
-
         }
 
         private void applyButton_Click(object sender, RoutedEventArgs e)
@@ -156,6 +154,7 @@ namespace todotxt
             }
             //string[] seperator = { "\r\n", "\n" }; // matches unix and windows newlines
             List<string> todoTextTemp = new List<string>(todoPlainTextTemp.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+
             // check if the file changed locally and if so load the changes into todoText
             foreach (string item in todoTextTemp)
             {
@@ -164,6 +163,7 @@ namespace todotxt
                     todoText.Insert(todoTextTemp.IndexOf(item), item);
                 }
             }
+
             // check if changes were made to todoText, if so write changes to file (rewrite file)
             foreach (string item in todoText)
             {
@@ -186,7 +186,7 @@ namespace todotxt
             populateTodoList();
         }
 
-        private /*async*/ void addTodoElement()
+        private void addTodoElement()
         {
             string textToAdd = "";
             if (autoDateCB.IsChecked == true)
@@ -196,18 +196,6 @@ namespace todotxt
             textToAdd = textToAdd.Insert(textToAdd.Length, inputBox.Text);
             todoText.Add(textToAdd);
             updateTodoFile();
-            /*try
-            {
-                if (todoFile != null)
-                {
-                    await Windows.Storage.FileIO.AppendTextAsync(todoFile, textToAdd + Environment.NewLine);
-                }
-            }
-            catch (FileNotFoundException)
-            {
-                //filenotfound
-            }*/
-
         }
 
         private void removeTodoElement()
