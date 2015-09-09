@@ -28,6 +28,7 @@ namespace todotxt
         private string todoFileToken = "";
         private string doneFileToken = "";
         private List<string> todoText;
+        private Object currentItem;
 
         public MainPage()
         {
@@ -99,7 +100,7 @@ namespace todotxt
                     }
                     if (done)
                     {
-                        readTodoFile();
+                        updateTodoFile();
                     }
                     break;
                 case "done":
@@ -139,7 +140,53 @@ namespace todotxt
             loadFile("done");
         }
 
-        private async void addTodoElement()
+        private async void updateTodoFile()
+        {
+            string todoPlainTextTemp = string.Empty;
+            try
+            {
+                if (todoFile != null)
+                {
+                    todoPlainTextTemp = await Windows.Storage.FileIO.ReadTextAsync(todoFile);
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                //filenotfound
+            }
+            //string[] seperator = { "\r\n", "\n" }; // matches unix and windows newlines
+            List<string> todoTextTemp = new List<string>(todoPlainTextTemp.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
+            // check if the file changed locally and if so load the changes into todoText
+            foreach (string item in todoTextTemp)
+            {
+                if (!todoText.Contains(item))
+                {
+                    todoText.Insert(todoTextTemp.IndexOf(item), item);
+                }
+            }
+            // check if changes were made to todoText, if so write changes to file (rewrite file)
+            foreach (string item in todoText)
+            {
+                if (!todoTextTemp.Contains(item))
+                {
+                    try
+                    {
+                        if (todoFile != null)
+                        {
+                            await Windows.Storage.FileIO.WriteTextAsync(todoFile, todoText.ToString());
+                        }
+                    }
+                    catch (FileNotFoundException)
+                    {
+                        //filenotfound
+                    }
+                    break;
+                }
+            }
+            populateTodoList();
+        }
+
+        private /*async*/ void addTodoElement()
         {
             string textToAdd = "";
             if (autoDateCB.IsChecked == true)
@@ -148,11 +195,26 @@ namespace todotxt
             }
             textToAdd = textToAdd.Insert(textToAdd.Length, inputBox.Text);
             todoText.Add(textToAdd);
-            fillTodoList();
-            if (todoFile != null)
+            updateTodoFile();
+            /*try
             {
-                await Windows.Storage.FileIO.AppendTextAsync(todoFile, textToAdd + Environment.NewLine);
+                if (todoFile != null)
+                {
+                    await Windows.Storage.FileIO.AppendTextAsync(todoFile, textToAdd + Environment.NewLine);
+                }
             }
+            catch (FileNotFoundException)
+            {
+                //filenotfound
+            }*/
+
+        }
+
+        private void removeTodoElement()
+        {
+            todoList.Items.Remove(currentItem);
+            todoText.Remove(currentItem.ToString());
+            updateTodoFile();
         }
 
         private async void loadFile(string fileType)
@@ -171,7 +233,7 @@ namespace todotxt
                         {
                             todoFileToken = Windows.Storage.AccessCache.StorageApplicationPermissions.FutureAccessList.Add(todoFile, todoFile.Name);
                             localSettings.Values["todoFileToken"] = todoFileToken;
-                            readTodoFile();
+                            updateTodoFile();
                         }
                     }
                     catch (FileNotFoundException)
@@ -187,15 +249,7 @@ namespace todotxt
             }
         }
 
-        private async void readTodoFile()
-        {
-            string todoTextTemp = await Windows.Storage.FileIO.ReadTextAsync(todoFile);
-            // string[] seperator = { "\r\n", "\n" };  matches unix and windows newlines
-            todoText = new List<string>(todoTextTemp.Split(new string[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries));
-            this.fillTodoList();
-        }
-
-        private void fillTodoList()
+        private void populateTodoList()
         {
             todoText.Sort(compareTodoStrings);
             todoList.Items.Clear();
@@ -238,6 +292,19 @@ namespace todotxt
             return 0;
         }
 
+        public void showOnItemSelection()
+        {
+            deleteButton.Visibility = Visibility.Visible;
+            doneButton.Visibility = Visibility.Visible;
+
+        }
+
+        public void hideOnItemSelection()
+        {
+            deleteButton.Visibility = Visibility.Collapsed;
+            doneButton.Visibility = Visibility.Collapsed;
+        }
+
         private void autoDateCB_Checked(object sender, RoutedEventArgs e)
         {
             localSettings.Values["autoAddDate"] = true;
@@ -259,6 +326,35 @@ namespace todotxt
             {
                 localSettings.Values.Remove("autoArchive");
             }
+        }
+
+        private void todoList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            currentItem = todoList.SelectedItem;
+            if (todoList.Items.Contains(currentItem))
+            {
+                
+                inputBox.Text = currentItem.ToString();
+            }
+            else
+            {
+                todoList.SelectedIndex = -1;
+                inputBox.Text = "";
+            }
+            showOnItemSelection();
+        }
+
+        private void deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentItem = todoList.SelectedItem;
+            inputBox.Text = "";
+            removeTodoElement();
+            hideOnItemSelection();
+        }
+
+        private void doneButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

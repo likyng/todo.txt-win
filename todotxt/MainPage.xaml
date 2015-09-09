@@ -30,9 +30,11 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel x:Name="inputPanel" Orientation="Horizontal" Margin="0, 20, 0, 20" Grid.Row="0">
+            <Button x:Name="doneButton" Content="Complete!" Visibility="Collapsed" Click="doneButton_Click"/>
             <TextBox x:Name="inputBox" Width="Auto" Margin="5, 0, 5, 0"/>
-            <Button x:Name="applyButton" Content="Apply!" Click="applyButton_Click"/>
-            <Button x:Name="settingsButton" Content="Settings">
+            <Button x:Name="applyButton" Width="Auto" Content="Apply!" Click="applyButton_Click"/>
+            <Button x:Name="deleteButton" Width="Auto" Content="Delete" Visibility="Collapsed" Click="deleteButton_Click"/>
+            <Button x:Name="settingsButton" Width="Auto" Content="Settings">
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel Orientation="Vertical">
@@ -53,7 +55,7 @@
             </Button>
             <TextBlock x:Name="debugText" Text="init.." />
         </StackPanel>
-            <ListBox x:Name="todoList" Margin="5, 5, 5, 5" Grid.Row="1"/>
+            <ListBox x:Name="todoList" Margin="5, 5, 5, 5" Grid.Row="1" SelectionChanged="todoList_SelectionChanged"/>
             
     </Grid>
 </Page>
