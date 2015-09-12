@@ -173,7 +173,13 @@ namespace todotxt
                     {
                         if (todoFile != null)
                         {
-                            await Windows.Storage.FileIO.WriteTextAsync(todoFile, todoText.ToString());
+                            string todoTextToWrite = string.Empty;
+                            foreach (string text in todoText)
+                            {
+                                todoTextToWrite = todoTextToWrite.Insert(todoTextToWrite.Length, text);
+                                todoTextToWrite = todoTextToWrite.Insert(todoTextToWrite.Length, Environment.NewLine);
+                            }
+                            await Windows.Storage.FileIO.WriteTextAsync(todoFile, todoTextToWrite);
                         }
                     }
                     catch (FileNotFoundException)
