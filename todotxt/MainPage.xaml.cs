@@ -173,7 +173,7 @@ namespace todotxt
             }
             if (mode == "add")
             {
-                todoText.Insert(todoText.Count, itemToAlter);
+                todoText.Add(itemToAlter);
             }
 
             // check if changes were made to todoText, if so write changes to file (rewrite file)
@@ -227,8 +227,7 @@ namespace todotxt
                 textToAdd = DateTime.Now.ToString("yyyy-MM-dd") + " ";
             }
             textToAdd = textToAdd.Insert(textToAdd.Length, inputBox.Text);
-            todoText.Add(textToAdd);
-            updateTodoFile();
+            updateTodoFile("add", textToAdd);
         }
 
         private void removeTodoElement()
@@ -380,11 +379,17 @@ namespace todotxt
                 return;
             }
             doneTextToAdd = currentItem.ToString();
+            string todoTextToRemove = doneTextToAdd;
+            doneTextToAdd = doneTextToAdd.Insert(0, "x ");
+            if (autoDateCB.IsChecked == true)
+            {
+                doneTextToAdd = doneTextToAdd.Insert(2, DateTime.Now.ToString("yyyy-MM-dd") + " ");
+            }
             updateDoneFile();
             // TODO: check hast to be done if file successfully written
             if (doneFileSuccessfullyWritten)
             {
-                updateTodoFile("remove", doneTextToAdd);
+                updateTodoFile("remove", todoTextToRemove);
             }
         }
     }
