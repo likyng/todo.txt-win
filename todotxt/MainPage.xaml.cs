@@ -25,9 +25,12 @@ namespace todotxt
         private Windows.Storage.ApplicationDataContainer localSettings;
         private Windows.Storage.StorageFile todoFile;
         private Windows.Storage.StorageFile doneFile;
-        private string todoFileToken = "";
-        private string doneFileToken = "";
+        private string todoFileToken = string.Empty;
+        private string doneFileToken = string.Empty;
         private List<string> todoText;
+        private string doneTextToAdd = string.Empty;
+        // TODO: check hast to be done if file successfully written
+        private bool doneFileSuccessfullyWritten = true;
         private Object currentItem;
 
         public MainPage()
@@ -138,7 +141,7 @@ namespace todotxt
             loadFile("done");
         }
 
-        private async void updateTodoFile()
+        private async void updateTodoFile(string mode = "refresh", string itemToAlter = "")
         {
             string todoPlainTextTemp = string.Empty;
             try
@@ -164,32 +167,56 @@ namespace todotxt
                 }
             }
 
-            // check if changes were made to todoText, if so write changes to file (rewrite file)
-            foreach (string item in todoText)
+            if (mode == "remove")
             {
-                if (!todoTextTemp.Contains(item))
+                todoText.Remove(itemToAlter);
+            }
+            if (mode == "add")
+            {
+                todoText.Insert(todoText.Count, itemToAlter);
+            }
+
+            // check if changes were made to todoText, if so write changes to file (rewrite file)
+            // TODO: equals is the wrong function to use to compare string elements
+            if (!todoTextTemp.Equals(todoText))
+            {
+                try
                 {
-                    try
+                    if (todoFile != null)
                     {
-                        if (todoFile != null)
+                        string todoTextToWrite = string.Empty;
+                        foreach (string text in todoText)
                         {
-                            string todoTextToWrite = string.Empty;
-                            foreach (string text in todoText)
-                            {
-                                todoTextToWrite = todoTextToWrite.Insert(todoTextToWrite.Length, text);
-                                todoTextToWrite = todoTextToWrite.Insert(todoTextToWrite.Length, Environment.NewLine);
-                            }
-                            await Windows.Storage.FileIO.WriteTextAsync(todoFile, todoTextToWrite);
+                            todoTextToWrite = todoTextToWrite.Insert(todoTextToWrite.Length, text);
+                            todoTextToWrite = todoTextToWrite.Insert(todoTextToWrite.Length, Environment.NewLine);
                         }
+                        await Windows.Storage.FileIO.WriteTextAsync(todoFile, todoTextToWrite);
                     }
-                    catch (FileNotFoundException)
-                    {
-                        //filenotfound
-                    }
-                    break;
+                }
+                catch (FileNotFoundException)
+                {
+                    //filenotfound
                 }
             }
             populateTodoList();
+        }
+
+        private async void updateDoneFile()
+        {
+            try
+            {
+                if (doneFile != null)
+                {
+                    await Windows.Storage.FileIO.AppendTextAsync(doneFile, doneTextToAdd);
+                    await Windows.Storage.FileIO.AppendTextAsync(doneFile, Environment.NewLine);
+                    doneFileSuccessfullyWritten = true;
+                }
+            }
+            catch (FileNotFoundException)
+            {
+                //filenotfound
+                //filenotset
+            }
         }
 
         private void addTodoElement()
@@ -348,7 +375,17 @@ namespace todotxt
 
         private void doneButton_Click(object sender, RoutedEventArgs e)
         {
-
+            if (currentItem == null)
+            {
+                return;
+            }
+            doneTextToAdd = currentItem.ToString();
+            updateDoneFile();
+            // TODO: check hast to be done if file successfully written
+            if (doneFileSuccessfullyWritten)
+            {
+                updateTodoFile("remove", doneTextToAdd);
+            }
         }
     }
 }
