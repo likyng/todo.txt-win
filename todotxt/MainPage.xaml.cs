@@ -177,8 +177,7 @@ namespace todotxt
             }
 
             // check if changes were made to todoText, if so write changes to file (rewrite file)
-            // TODO: equals is the wrong function to use to compare string elements
-            if (!todoTextTemp.Equals(todoText))
+            if (!todoTextTemp.SequenceEqual(todoText))
             {
                 try
                 {
