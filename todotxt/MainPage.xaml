@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Margin="2, 0, 2, 0">
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup>
                 <VisualState x:Name="wideState">
@@ -29,12 +29,12 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel x:Name="inputPanel" Orientation="Horizontal" Margin="0, 20, 0, 20" Grid.Row="0">
-            <Button x:Name="doneButton" Content="Complete!" Visibility="Collapsed" Click="doneButton_Click"/>
+        <StackPanel x:Name="inputPanel" Orientation="Horizontal" Margin="0, 10, 0, 10" Grid.Row="0">
+            <Button x:Name="doneButton" Content="✔" Visibility="Collapsed" Click="doneButton_Click"/>
             <TextBox x:Name="inputBox" Width="Auto" Margin="5, 0, 5, 0"/>
             <Button x:Name="applyButton" Width="Auto" Content="Apply!" Click="applyButton_Click"/>
             <Button x:Name="deleteButton" Width="Auto" Content="Delete" Visibility="Collapsed" Click="deleteButton_Click"/>
-            <Button x:Name="settingsButton" Width="Auto" Content="Settings">
+            <Button x:Name="settingsButton" Width="Auto" Content="&#xE115;" FontFamily="Segoe MDL2 Assets" >
                 <Button.Flyout>
                     <Flyout>
                         <StackPanel Orientation="Vertical">
@@ -54,7 +54,12 @@
                 </Button.Flyout>
             </Button>
         </StackPanel>
-            <ListBox x:Name="todoList" Margin="5, 5, 5, 5" Grid.Row="1" SelectionChanged="todoList_SelectionChanged"/>
-            
+        <ListBox x:Name="todoList" Margin="0, 2, 0, 2" Grid.Row="1" SelectionChanged="todoList_SelectionChanged">
+            <ListBox.Resources>
+                <Style TargetType="ListBoxItem" x:Key="doneItemStyle">
+                    <Setter Property="Background" Value="Red"/>
+                </Style>
+            </ListBox.Resources>
+        </ListBox>
     </Grid>
 </Page>

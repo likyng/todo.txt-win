@@ -31,13 +31,16 @@ namespace todotxt
         private string doneTextToAdd = string.Empty;
         // TODO: check hast to be done if file successfully written
         private bool doneFileSuccessfullyWritten = true;
+        // TODO: when selected item is changed, update item instead of creating a new one
         private Object currentItem;
+
+        public Style CrossedOutStyle { set; get; }
 
         public MainPage()
         {
             this.InitializeComponent();
-            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Size { Height = 550, Width = 420 };
-            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;
+            /*Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Size { Height = 550, Width = 420 };
+            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;*/
             todoText = new List<string>();
             localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
@@ -324,6 +327,27 @@ namespace todotxt
             doneButton.Visibility = Visibility.Collapsed;
         }
 
+        private void archiveItem()
+        {
+            if (currentItem == null)
+            {
+                return;
+            }
+            doneTextToAdd = currentItem.ToString();
+            string todoTextToRemove = doneTextToAdd;
+            doneTextToAdd = doneTextToAdd.Insert(0, "x ");
+            if (autoDateCB.IsChecked == true)
+            {
+                doneTextToAdd = doneTextToAdd.Insert(2, DateTime.Now.ToString("yyyy-MM-dd") + " ");
+            }
+            updateDoneFile();
+            // TODO: check hast to be done if file successfully written
+            if (doneFileSuccessfullyWritten)
+            {
+                updateTodoFile("remove", todoTextToRemove);
+            }
+        }
+
         private void autoDateCB_Checked(object sender, RoutedEventArgs e)
         {
             localSettings.Values["autoAddDate"] = true;
@@ -371,25 +395,29 @@ namespace todotxt
             hideOnItemSelection();
         }
 
+        // TODO: only cross item out. remove only if auto archive is enabled
         private void doneButton_Click(object sender, RoutedEventArgs e)
         {
             if (currentItem == null)
             {
                 return;
             }
-            doneTextToAdd = currentItem.ToString();
-            string todoTextToRemove = doneTextToAdd;
-            doneTextToAdd = doneTextToAdd.Insert(0, "x ");
-            if (autoDateCB.IsChecked == true)
+
+            if (autoArchiveCB.IsChecked == true)
             {
-                doneTextToAdd = doneTextToAdd.Insert(2, DateTime.Now.ToString("yyyy-MM-dd") + " ");
+                archiveItem();
             }
-            updateDoneFile();
-            // TODO: check hast to be done if file successfully written
-            if (doneFileSuccessfullyWritten)
+            else
             {
-                updateTodoFile("remove", todoTextToRemove);
+                Style st = new Style();
+                st.TargetType = typeof(ListBoxItem);
+                st.Setters.Add(new Setter(ListBoxItem.BackgroundProperty, "Blue"));
+                //Resources.Add(typeof(ListBoxItem), st);
+                todoList.ItemContainerStyle = st;
             }
+
         }
+        
     }
+
 }
