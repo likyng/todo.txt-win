@@ -30,10 +30,10 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel x:Name="inputPanel" Orientation="Horizontal" Margin="0, 10, 0, 10" Grid.Row="0">
-            <Button x:Name="doneButton" Content="✔" Visibility="Collapsed" Click="doneButton_Click"/>
+            <Button x:Name="doneButton" Content="&#xE008;" Visibility="Collapsed" Click="doneButton_Click" FontFamily="Segoe MDL2 Assets"/>
             <TextBox x:Name="inputBox" Width="Auto" Margin="5, 0, 5, 0"/>
             <Button x:Name="applyButton" Width="Auto" Content="Apply!" Click="applyButton_Click"/>
-            <Button x:Name="deleteButton" Width="Auto" Content="Delete" Visibility="Collapsed" Click="deleteButton_Click"/>
+            <Button x:Name="deleteButton" Width="Auto" Content="&#xE74D;" FontFamily="Segoe MDL2 Assets" Visibility="Collapsed" Click="deleteButton_Click"/>
             <Button x:Name="settingsButton" Width="Auto" Content="&#xE115;" FontFamily="Segoe MDL2 Assets" >
                 <Button.Flyout>
                     <Flyout>

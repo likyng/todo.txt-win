@@ -234,9 +234,7 @@ namespace todotxt
 
         private void removeTodoElement()
         {
-            todoList.Items.Remove(currentItem);
-            todoText.Remove(currentItem.ToString());
-            updateTodoFile();
+            updateTodoFile("remove", currentItem.ToString());
         }
 
         private async void loadFile(string fileType)
