@@ -237,12 +237,6 @@ namespace todotxt
             updateTodoFile("add", textToAdd);
         }
 
-        private void removeTodoElement()
-        // Initiates removal (deletion) of the currently selected todo item.
-        {
-            updateTodoFile("remove", currentItem.ToString());
-        }
-
         private async void loadFile(string fileType)
         // Opens the file picker to let the user chose a todo or done file.
         // Stores the choice in the app's settings store.
@@ -335,16 +329,28 @@ namespace todotxt
 
         private void archiveItem()
         {
+            if (doneFile == null)
+            {
+                Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("done.txt file not found. Specify a new one in the Settings.", "done.txt file not found");
+            }
             if (currentItem == null)
             {
                 return;
             }
             doneTextToAdd = currentItem.ToString();
             string todoTextToRemove = doneTextToAdd;
-            doneTextToAdd = doneTextToAdd.Insert(0, "x ");
+            // Check if string contains a priority and if so, remove it
+            if (doneTextToAdd[0] == '(' && System.Char.IsUpper(doneTextToAdd[1]) && doneTextToAdd[2] == ')' && doneTextToAdd[3] == ' ')
+            {
+                doneTextToAdd = doneTextToAdd.Substring(4);
+            }
             if (autoDateCB.IsChecked == true)
             {
-                doneTextToAdd = doneTextToAdd.Insert(2, DateTime.Now.ToString("yyyy-MM-dd") + " ");
+                doneTextToAdd = doneTextToAdd.Insert(0, "x " + DateTime.Now.ToString("yyyy-MM-dd") + " ");
+            }
+            else if (autoDateCB.IsChecked == false)
+            {
+                doneTextToAdd = doneTextToAdd.Insert(0, "x ");
             }
             updateDoneFile();
             // TODO: check hast to be done if file successfully written
@@ -397,7 +403,7 @@ namespace todotxt
         {
             currentItem = todoList.SelectedItem;
             inputBox.Text = "";
-            removeTodoElement();
+            updateTodoFile("remove", currentItem.ToString());
             hideOnItemSelection();
         }
 
