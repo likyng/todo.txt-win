@@ -13,13 +13,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
-// The Blank Page item template is documented at http://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x409
 
 namespace todotxt
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         private Windows.Storage.ApplicationDataContainer localSettings;
@@ -39,8 +35,6 @@ namespace todotxt
         public MainPage()
         {
             this.InitializeComponent();
-            /*Windows.UI.ViewManagement.ApplicationView.PreferredLaunchViewSize = new Size { Height = 550, Width = 420 };
-            Windows.UI.ViewManagement.ApplicationView.PreferredLaunchWindowingMode = Windows.UI.ViewManagement.ApplicationViewWindowingMode.PreferredLaunchViewSize;*/
             todoText = new List<string>();
             localSettings = Windows.Storage.ApplicationData.Current.LocalSettings;
 
@@ -89,6 +83,7 @@ namespace todotxt
         }
 
         private async void loadFileFromToken(string fileType)
+        // Tries to open a todo or done file from a token previously stored in the settings store.
         {
             bool done = false;
             switch (fileType)
@@ -101,7 +96,7 @@ namespace todotxt
                     }
                     catch (FileNotFoundException)
                     {
-                        Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("Todo file not found. Specify a new one in the Settings.", "todo.txt File not found");
+                        Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("todo.txt file not found. Specify a new one in the Settings.", "todo.txt file not found");
                     }
                     if (done)
                     {
@@ -117,10 +112,7 @@ namespace todotxt
                     }
                     catch (FileNotFoundException)
                     {
-                        Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("Done file not found. Specify a new one in the Settings.", "done.txt File not found");
-                    }
-                    if (done)
-                    {
+                        Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("done.txt file not found. Specify a new one in the Settings.", "done.txt file not found");
                     }
                     break;
             }
@@ -222,8 +214,13 @@ namespace todotxt
         }
 
         private void addTodoElement()
+        // Adds a todo element to the todo.txt file while respecting the apps settings.
         {
             string textToAdd = "";
+            if (inputBox.Text[0] == '(' && inputBox.Text[2] == ')')
+            {
+
+            }
             if (autoDateCB.IsChecked == true)
             {
                 textToAdd = DateTime.Now.ToString("yyyy-MM-dd") + " ";
@@ -233,11 +230,14 @@ namespace todotxt
         }
 
         private void removeTodoElement()
+        // Initiates removal (deletion) of the currently selected todo item.
         {
             updateTodoFile("remove", currentItem.ToString());
         }
 
         private async void loadFile(string fileType)
+        // Opens the file picker to let the user chose a todo or done file.
+        // Stores the choice in the app's settings store.
         {
             Windows.Storage.Pickers.FileOpenPicker openPicker = new Windows.Storage.Pickers.FileOpenPicker();
             openPicker.ViewMode = Windows.Storage.Pickers.PickerViewMode.List;

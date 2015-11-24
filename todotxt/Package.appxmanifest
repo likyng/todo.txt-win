@@ -3,8 +3,8 @@
   <Identity Name="37346Likyng.todotxt" Publisher="CN=9198FBBE-2F11-43BC-8FAB-D408A367FE36" Version="1.1.0.0" />
   <mp:PhoneIdentity PhoneProductId="24967693-03c7-49e7-9661-ab2ce6d6e0aa" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>todotxt</DisplayName>
-    <PublisherDisplayName>Nimar B</PublisherDisplayName>
+    <DisplayName>todo.txt win</DisplayName>
+    <PublisherDisplayName>Nimar Blume</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
   <Dependencies>
@@ -15,10 +15,12 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="todotxt.App">
-      <uap:VisualElements DisplayName="todotxt" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\todo-1240.png" Description="Todotxt is a very simple todo app which supports the popular todo.txt format. You can read more about the todo.txt format here: http://todotxt.com/ ! The app is does not yet provide full support for the todo.txt format, as in remiders etc. do not work yet. That functionality will be included in an update down the line." BackgroundColor="black">
-        <uap:DefaultTile ShortName="todo.txt" Square71x71Logo="Assets\Square71x71Logo.png">
+      <uap:VisualElements DisplayName="todo.txt win" Square150x150Logo="Assets\Square150x150Logo.png" Square44x44Logo="Assets\todo-1240.png" Description="Todotxt is a very simple todo app which supports the popular todo.txt format. You can read more about the todo.txt format here: http://todotxt.com/ ! The app is does not yet provide full support for the todo.txt format, as in remiders etc. do not work yet. That functionality will be included in an update down the line." BackgroundColor="black">
+        <uap:DefaultTile ShortName="todo.txt win" Square71x71Logo="Assets\Square71x71Logo.png" Square310x310Logo="Assets\Square310x310Logo.png" Wide310x150Logo="Assets\Wide310x150Logo.png">
           <uap:ShowNameOnTiles>
             <uap:ShowOn Tile="square150x150Logo" />
+            <uap:ShowOn Tile="wide310x150Logo" />
+            <uap:ShowOn Tile="square310x310Logo" />
           </uap:ShowNameOnTiles>
         </uap:DefaultTile>
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="black" />
