@@ -353,7 +353,7 @@ namespace todotxt
                 doneTextToAdd = doneTextToAdd.Insert(0, "x ");
             }
             updateDoneFile();
-            // TODO: check hast to be done if file successfully written
+            // TODO: check has to be done if the done file was successfully written.
             if (doneFileSuccessfullyWritten)
             {
                 updateTodoFile("remove", todoTextToRemove);

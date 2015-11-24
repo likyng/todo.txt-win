@@ -51,8 +51,8 @@
                                 <TextBlock Text="done.txt File: " VerticalAlignment="Center"/>
                                 <Button x:Name="chooseDoneFile" Content="Choose File" Margin="2" Click="chooseDoneFile_Click"/>
                             </StackPanel>
-                            <CheckBox x:Name="autoArchiveCB" Content="Auto Archive" Checked="autoArchiveCB_Checked" Unchecked="autoArchiveCB_Unchecked"/>
-                            <CheckBox x:Name="autoDateCB" Content="Auto add Date" Checked="autoDateCB_Checked" Unchecked="autoDateCB_Unchecked"/>
+                            <CheckBox x:Name="autoArchiveCB" Content="Auto Archive" Checked="autoArchiveCB_Checked" Unchecked="autoArchiveCB_Unchecked" IsChecked="True"/>
+                            <CheckBox x:Name="autoDateCB" Content="Auto add Date" Checked="autoDateCB_Checked" Unchecked="autoDateCB_Unchecked" IsChecked="True"/>
                         </StackPanel>
                     </Flyout>
                 </Button.Flyout>
