@@ -216,16 +216,24 @@ namespace todotxt
         private void addTodoElement()
         // Adds a todo element to the todo.txt file while respecting the apps settings.
         {
+            string textToPrepend = "";
             string textToAdd = "";
-            if (inputBox.Text[0] == '(' && inputBox.Text[2] == ')')
-            {
-
-            }
             if (autoDateCB.IsChecked == true)
             {
-                textToAdd = DateTime.Now.ToString("yyyy-MM-dd") + " ";
+                textToPrepend = DateTime.Now.ToString("yyyy-MM-dd") + " ";
+                if (inputBox.Text[0] == '(' && System.Char.IsUpper(inputBox.Text[1]) && inputBox.Text[2] == ')' && inputBox.Text[3] == ' ')
+                {
+                    textToAdd = inputBox.Text.Insert(4, textToPrepend);
+                }
+                else
+                {
+                    textToAdd = textToPrepend.Insert(textToPrepend.Length, inputBox.Text);
+                }
             }
-            textToAdd = textToAdd.Insert(textToAdd.Length, inputBox.Text);
+            else
+            {
+                textToAdd = textToPrepend.Insert(textToPrepend.Length, inputBox.Text);
+            }
             updateTodoFile("add", textToAdd);
         }
 
