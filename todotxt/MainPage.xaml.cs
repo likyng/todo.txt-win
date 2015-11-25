@@ -140,6 +140,11 @@ namespace todotxt
             }
         }
 
+        private void editButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void chooseTodoFile_Click(object sender, RoutedEventArgs e)
         {
             loadFile("todo");
@@ -444,6 +449,7 @@ namespace todotxt
             }
 
         }
+
         
     }
 
