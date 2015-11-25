@@ -314,6 +314,7 @@ namespace todotxt
         {
             deleteButton.Visibility = Visibility.Visible;
             doneButton.Visibility = Visibility.Visible;
+            editButton.Visibility = Visibility.Visible;
 
         }
 
@@ -321,6 +322,7 @@ namespace todotxt
         {
             deleteButton.Visibility = Visibility.Collapsed;
             doneButton.Visibility = Visibility.Collapsed;
+            editButton.Visibility = Visibility.Collapsed;
         }
 
         private void archiveItem()
@@ -406,6 +408,12 @@ namespace todotxt
 
         private void editButton_Click(object sender, RoutedEventArgs e)
         {
+            if (currentItem == null || String.IsNullOrWhiteSpace(inputBox.Text))
+            {
+                return;
+            }
+            updateTodoFile("remove", currentItem.ToString());
+            updateTodoFile("add", inputBox.Text);            
 
         }
 
