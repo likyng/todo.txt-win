@@ -130,30 +130,7 @@ namespace todotxt
                     }
                     break;
             }
-        }
-
-        private void addButton_Click(object sender, RoutedEventArgs e)
-        {
-            if (!String.IsNullOrWhiteSpace(inputBox.Text) && !todoList.Items.Contains(inputBox.Text))
-            {
-                addTodoElement();
-            }
-        }
-
-        private void editButton_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void chooseTodoFile_Click(object sender, RoutedEventArgs e)
-        {
-            loadFile("todo");
-        }
-
-        private void chooseDoneFile_Click(object sender, RoutedEventArgs e)
-        {
-            loadFile("done");
-        }
+        }      
 
         private async void updateTodoFile(string mode = "refresh", string itemToAlter = "")
         {
@@ -379,29 +356,6 @@ namespace todotxt
             }
         }
 
-        private void autoDateCB_Checked(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["autoAddDate"] = true;
-        }
-
-        private void autoDateCB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["autoAddDate"] = false;
-        }
-
-        private void autoArchiveCB_Checked(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["autoArchive"] = true;
-        }
-
-        private void autoArchiveCB_Unchecked(object sender, RoutedEventArgs e)
-        {
-            if (localSettings.Values["autoArchive"] != null)
-            {
-                localSettings.Values.Remove("autoArchive");
-            }
-        }
-
         private void todoList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             currentItem = todoList.SelectedItem;
@@ -416,14 +370,6 @@ namespace todotxt
                 inputBox.Text = "";
             }
             showOnItemSelection();
-        }
-
-        private void deleteButton_Click(object sender, RoutedEventArgs e)
-        {
-            currentItem = todoList.SelectedItem;
-            inputBox.Text = "";
-            updateTodoFile("remove", currentItem.ToString());
-            hideOnItemSelection();
         }
 
         // TODO: only cross item out. remove only if auto archive is enabled
@@ -450,7 +396,59 @@ namespace todotxt
 
         }
 
-        
-    }
+        private void addButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (!String.IsNullOrWhiteSpace(inputBox.Text) && !todoList.Items.Contains(inputBox.Text))
+            {
+                addTodoElement();
+            }
+        }
 
+        private void editButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void deleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            currentItem = todoList.SelectedItem;
+            inputBox.Text = "";
+            updateTodoFile("remove", currentItem.ToString());
+            hideOnItemSelection();
+        }
+
+        private void chooseTodoFile_Click(object sender, RoutedEventArgs e)
+        {
+            loadFile("todo");
+        }
+
+        private void chooseDoneFile_Click(object sender, RoutedEventArgs e)
+        {
+            loadFile("done");
+        }
+
+        private void autoDateCB_Checked(object sender, RoutedEventArgs e)
+        {
+            localSettings.Values["autoAddDate"] = true;
+        }
+
+        private void autoDateCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            localSettings.Values["autoAddDate"] = false;
+        }
+
+        private void autoArchiveCB_Checked(object sender, RoutedEventArgs e)
+        {
+            localSettings.Values["autoArchive"] = true;
+        }
+
+        private void autoArchiveCB_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (localSettings.Values["autoArchive"] != null)
+            {
+                localSettings.Values.Remove("autoArchive");
+            }
+        }
+
+    }
 }
