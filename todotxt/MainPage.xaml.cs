@@ -50,6 +50,11 @@ namespace todotxt
                     autoDateCB.IsChecked = false;
                 }
             }
+            else
+            {
+                autoDateCB.IsChecked = true;
+                localSettings.Values["autoAddDate"] = true;
+            }
 
             Object autoArchive = localSettings.Values["autoArchive"];
             if (autoArchive != null)
@@ -58,6 +63,15 @@ namespace todotxt
                 {
                     autoArchiveCB.IsChecked = true;
                 }
+                else
+                {
+                    autoArchiveCB.IsChecked = false;
+                }
+            }
+            else
+            {
+                autoArchiveCB.IsChecked = true;
+                localSettings.Values["autoArchive"] = true;
             }
 
             Object loadedTodoFileToken = localSettings.Values["todoFileToken"];
@@ -421,11 +435,12 @@ namespace todotxt
             }
             else
             {
-                Style st = new Style();
+                /* Style st = new Style();
                 st.TargetType = typeof(ListBoxItem);
                 st.Setters.Add(new Setter(ListBoxItem.BackgroundProperty, "Blue"));
                 //Resources.Add(typeof(ListBoxItem), st);
-                todoList.ItemContainerStyle = st;
+                todoList.ItemContainerStyle = st; */
+                Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("Archiving items is currently only possible using the AutoArchive feature (enable it in the app settings).", "Unable to archive item");
             }
 
         }
