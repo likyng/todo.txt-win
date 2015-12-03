@@ -111,6 +111,7 @@ namespace todotxt
                     catch (FileNotFoundException)
                     {
                         Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("todo.txt file not found. Specify a new one in the Settings.", "todo.txt file not found");
+                        dialog.ShowAsync();
                     }
                     if (done)
                     {
@@ -127,6 +128,7 @@ namespace todotxt
                     catch (FileNotFoundException)
                     {
                         Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("done.txt file not found. Specify a new one in the Settings.", "done.txt file not found");
+                        dialog.ShowAsync();
                     }
                     break;
             }
@@ -330,6 +332,7 @@ namespace todotxt
             if (doneFile == null)
             {
                 Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("done.txt file not found. Specify a new one in the Settings.", "done.txt file not found");
+                dialog.ShowAsync();
             }
             if (currentItem == null)
             {
@@ -394,6 +397,7 @@ namespace todotxt
                 //Resources.Add(typeof(ListBoxItem), st);
                 todoList.ItemContainerStyle = st; */
                 Windows.UI.Popups.MessageDialog dialog = new Windows.UI.Popups.MessageDialog("Archiving items is currently only possible using the AutoArchive feature (enable it in the app settings).", "Unable to archive item");
+                dialog.ShowAsync();
             }
 
         }
@@ -414,7 +418,6 @@ namespace todotxt
             }
             updateTodoFile("remove", currentItem.ToString());
             updateTodoFile("add", inputBox.Text);            
-
         }
 
         private void deleteButton_Click(object sender, RoutedEventArgs e)
